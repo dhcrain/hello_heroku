@@ -1,1 +1,1 @@
-web: gunicorn hello_heroku.wsgi --workers=2
+web: gunicorn hello_heroku.wsgi --workers=1
