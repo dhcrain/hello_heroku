@@ -16,6 +16,9 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from app.views import IndexView
+from short_app import views
+from django.contrib.auth.views import login, logout
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -32,3 +35,4 @@ urlpatterns = [
     url(r'^accounts/profile/edit_link/(?P<pk>\d+)/delete/$', views.LinkDelete.as_view(), name='delete_bookmark_view'),
     url(r'^shorten_link/$', views.ShortenLink.as_view(), name='shorten_link'),
     url(r'^d/(?P<hash_id>\w+)', views.ForwardView.as_view(), name='forward_view'),
+]
