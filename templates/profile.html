@@ -2,21 +2,21 @@
 
 {% block title %}Short it up{% endblock %}
 
+{% block head %}
+{% endblock %}
+
 {% block content %}
-    <h1>Short it up!</h1>
-    <a href="{% url 'user_view' %}">See What Other Users are Bookmarking</a>
-    <hr>
-    <h2>All Saved Bookmarks</h2>
-    <table class="table table-condensed">
+    <h1>Saved Bookmarks</h1>
+    <table class="table table-condensed sm-row-3">
         <tr>
             <th>Title</th>
             <th>Original Link</th>
             <th>Short Link</th>
             <th>Click Hist</th>
+            <th></th>
             <td></td>
-            <td></td>
-        </tr>
-    {% for mark in object_list %}
+                    </tr>
+    {% for mark in bookmark %}
         <tr>
             <td>{{ mark.title }}</td>
             <td><a href="{% url 'forward_view' mark.hash_id %}" target="_blank" >{{ mark.url }}</a></td>
@@ -25,27 +25,17 @@
                 <button class="copy-btn" data-copytarget="#website">copy</button>
             </td>
             <td><a href="{% url 'click_view' mark.id %}">{{ mark.count }}</a></td>
+{#            {% if request.user.is_authenticated %}#}
             {% if mark.user = request.user %}
                 <td><a class="btn" href="{% url 'edit_bookmark_view' mark.id %}">Edit</a></td>
                 <td><a class="btn btn-danger" href="{% url 'delete_bookmark_view' mark.id %}">Delete</a></td>
             {% else %}
-                <td><a href="{% url 'user_profile_view' mark.user.id %}">{{ mark.user }}</a></td>
+                <td>{{ mark.user }}</td>
                 <td></td>
             {% endif %}
+{#            {% endif %}#}
         </tr>
     {% endfor %}
     </table>
-{#    https://docs.djangoproject.com/en/1.9/topics/class-based-views/mixins/#using-singleobjectmixin-with-listview#}
-    <nav>
-        <ul class="pager">
-            {% if page_obj.has_previous %}
-                <li><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
-            {% endif %}
-            <li>Page {{ page_obj.number }} of {{ paginator.num_pages }}</li>
-            {% if page_obj.has_next %}
-                <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
-            {% endif %}
-        </ul>
-    </nav>
-    {% endblock %}
+{% endblock %}
 
