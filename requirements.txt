@@ -2,3 +2,4 @@ Django
 gunicorn
 hashids==1.1.0
 whitenoise==3.2
+dj-database-url==0.4.1
