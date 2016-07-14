@@ -84,8 +84,9 @@ WSGI_APPLICATION = 'hello_heroku.wsgi.application'
 #     }
 # }
 DATABASES = {
-    'default': dj_database_url.config(default="postgres:///short-app", conn_max_age=500)
+    'default': dj_database_url.config(default="postgres:///hello_heroku", conn_max_age=500)
 }
+# DATABASES['default'] =  dj_database_url.config()
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
