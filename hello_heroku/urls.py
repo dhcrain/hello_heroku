@@ -35,4 +35,6 @@ urlpatterns = [
     url(r'^accounts/profile/edit_link/(?P<pk>\d+)/delete/$', views.LinkDelete.as_view(), name='delete_bookmark_view'),
     url(r'^shorten_link/$', views.ShortenLink.as_view(), name='shorten_link'),
     url(r'^d/(?P<hash_id>\w+)', views.ForwardView.as_view(), name='forward_view'),
+    url(r'^countdown/$', views.CountDown.as_view(template_name="countdown.html"), name='countdown'),
+
 ]
