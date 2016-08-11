@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.dispatch import receiver
 from django.http import HttpResponseRedirect, Http404, request
-from django.views.generic import TemplateView, CreateView, RedirectView, UpdateView, ListView, DeleteView
+from django.views.generic import View, TemplateView, CreateView, RedirectView, UpdateView, ListView, DeleteView
 from django.views.generic.list import MultipleObjectMixin
 from hashids import Hashids
 from short_app.models import Bookmark, Click
@@ -15,15 +15,13 @@ from django.core.urlresolvers import reverse_lazy
 class IndexView(ListView):
     model = Bookmark
     template_name = 'index.html'
-    paginate_by = 5
+    paginate_by = 15
 
 
 class SignUpView(CreateView):
     model = User
     form_class = UserCreationForm
-    # success_url = '/login/'
     success_url = reverse_lazy('login_view')
-
 
 
 class ProfileView(ListView):
@@ -31,8 +29,7 @@ class ProfileView(ListView):
     model = Bookmark
 
     def get_context_data(self, **kwargs):
-        # user_id = self.kwargs.get('user', None)  # gets Bookmark PK
-        context = super().get_context_data(**kwargs)  # I have no idea what this does
+        context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated():
             context["bookmark"] = Bookmark.objects.filter(user_id=self.request.user)
         else:
@@ -43,7 +40,7 @@ class ProfileView(ListView):
 class ShortenLink(CreateView):
     model = Bookmark
     fields = ['title', 'url', 'description']
-    success_url = '/accounts/profile/'
+    success_url = reverse_lazy('profile_view')
 
     def form_valid(self, form):
         hashids = Hashids(salt="yabbadabbadooo")
@@ -53,29 +50,27 @@ class ShortenLink(CreateView):
         return super(ShortenLink, self).form_valid(form)
 
 
-class ForwardView(RedirectView):
+class ForwardView(View):
 
-    # https://godjango.com/15-class-based-views-part-1-templateview-and-redirectview/
     def get(self, request, *args, **kwargs):
         hash_id = self.kwargs.get('hash_id', None)      # gets hash_id
         link = Bookmark.objects.get(hash_id=hash_id)    # looks up the link from the hash_id
-        self.url = link.url
         link.count += 1         # increment the count on the Bookmark table
         link.save()
         Click.objects.create(link=link, time_click=datetime.datetime.now())
-        return super(ForwardView, self).get(request, args, **kwargs)
+        return HttpResponseRedirect(link.url)
 
 
 class EditBookmark(LoginRequiredMixin, UpdateView):
     model = Bookmark
     fields = ['title', 'url', 'description']
-    success_url = '/accounts/profile/'
+    success_url = reverse_lazy('profile_view')
     template_name = 'update.html'
 
 
 class LinkDelete(LoginRequiredMixin, DeleteView):
     model = Bookmark
-    success_url = '/accounts/profile/'
+    success_url = reverse_lazy('profile_view')
 
     def get_object(self, queryset=None):
         link = super(LinkDelete, self).get_object()
@@ -91,8 +86,8 @@ class ClickView(TemplateView):
     template_name = "short_app/click_list.html"
 
     def get_context_data(self, **kwargs):
-        bookmark_pk = self.kwargs.get('pk', None)      # gets Bookmark PK
-        context = super().get_context_data(**kwargs)    # I have no idea what this does
+        bookmark_pk = self.kwargs.get('pk')
+        context = super().get_context_data(**kwargs)
         context["bookmark"] = Bookmark.objects.get(id=bookmark_pk)
         context["clicks"] = Click.objects.filter(link=bookmark_pk)
         return context
@@ -111,7 +106,7 @@ class UserProfileView(ListView):
     template_name = 'profile.html'
 
     def get_context_data(self, **kwargs):
-        user_id = self.kwargs.get('pk', None)  # gets user_id
-        context = super().get_context_data(**kwargs)  # I have no idea what this does
+        user_id = self.kwargs.get('pk')
+        context = super().get_context_data(**kwargs)
         context["bookmark"] = Bookmark.objects.filter(user_id=user_id)
         return context

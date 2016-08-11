@@ -1,7 +1,6 @@
 /*
   Copy text from any appropriate field to the clipboard
   By Craig Buckler, @craigbuckler
-  use it, abuse it, do whatever you like with it!
 */
 (function() {
 
@@ -29,6 +28,10 @@
         // copy text
         document.execCommand('copy');
         inp.blur();
+
+        // copied animation
+        t.classList.add('copied');
+        setTimeout(function() { t.classList.remove('copied'); }, 1500);
       }
       catch (err) {
         alert('please press Ctrl/Cmd+C to copy');

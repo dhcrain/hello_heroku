@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 
-{% block title %}Short it up{% endblock %}
-
 {% block head %}
 {% endblock %}
 
@@ -17,21 +15,22 @@
     <tr>
         <td><a href="{% url 'forward_view' bookmark.hash_id %}" target="_blank" >{{ bookmark.url }}</a></td>
         <td>
-            <input class="copy-text" type="text" id="website" value="http://{{ request.get_host }}{% url 'forward_view' bookmark.hash_id %}" />
-            <button class="copy-btn" data-copytarget="#website">copy</button>
+            <input class="copy-text" type="text" id="website{{ mark.id }}" value="http://{{ request.get_host }}{% url 'forward_view' bookmark.hash_id %}" />
+            <button class="copy-btn" data-copytarget="#website{{ mark.id }}">copy</button>
         </td>
         <td>{{ bookmark.description }}</td>
     </tr>
     </table>
 
-                <table class="table table-condensed">
-                    <tr>
-                        <th>Time Clicked</th>
-                    </tr>
-                {% for click in clicks %}
-                    <tr>
-                        <td>{{ click.time_click }}</td>
-                    </tr>
-                {% endfor %}
-                </table>
+    <table class="table table-condensed">
+        <tr>
+            <th>Time Clicked</th>
+        </tr>
+    {% for click in clicks %}
+        <tr>
+            <td>{{ click.time_click }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
 {% endblock %}

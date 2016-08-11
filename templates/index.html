@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
-{% block title %}Short it up{% endblock %}
+{% block title %}dhcra.in{% endblock %}
 
 {% block content %}
-    <h1>Short it up!</h1>
+    <h1>dhcra.in <small>a URL shortner</small></h1>
     <a href="{% url 'user_view' %}">See What Other Users are Bookmarking</a>
     <hr>
     <h2>All Saved Bookmarks</h2>
@@ -11,8 +11,8 @@
         <tr>
             <th>Title</th>
             <th>Original Link</th>
-            <th width="200">Short Link</th>
-            <th>Click Hist</th>
+            <th>Short Link</th>
+            <th>Stats</th>
             <td></td>
             <td></td>
         </tr>
@@ -21,11 +21,11 @@
             <td>{{ mark.title }}</td>
             <td><a href="{% url 'forward_view' mark.hash_id %}" target="_blank" >{{ mark.url }}</a></td>
             <td>
-                <input class="copy-text" type="text" id="website" value="http://{{ request.get_host }}{% url 'forward_view' mark.hash_id %}" />
-                <button class="copy-btn" data-copytarget="#website">copy</button>
+                <input class="copy-text" type="text" id="website{{ mark.id }}" value="http://{{ request.get_host }}{% url 'forward_view' mark.hash_id %}" />
+                <button class="copy-btn" data-copytarget="#website{{ mark.id }}">copy</button>
             </td>
             <td><a href="{% url 'click_view' mark.id %}">{{ mark.count }}</a></td>
-            {% if mark.user = request.user %}
+            {% if mark.user == request.user %}
                 <td><a class="btn" href="{% url 'edit_bookmark_view' mark.id %}">Edit</a></td>
                 <td><a class="btn btn-danger" href="{% url 'delete_bookmark_view' mark.id %}">Delete</a></td>
             {% else %}
