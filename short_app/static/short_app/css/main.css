@@ -66,7 +66,7 @@ input {
 }
 /* end copy style */
 
-.sm-row-3 tr td:nth-child(3) {
+.short-copy {
     width: 250px;
     table-layout: fixed;
     word-wrap: break-word;

@@ -4,7 +4,7 @@ from django.db import models
 
 class Bookmark(models.Model):
     title = models.CharField(max_length=60)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     url = models.URLField()
     created = models.DateTimeField(auto_now_add=True)
     hash_id = models.CharField(max_length=10, null=True)
