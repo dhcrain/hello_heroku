@@ -15,7 +15,7 @@ from django.core.urlresolvers import reverse_lazy
 class IndexView(ListView):
     model = Bookmark
     template_name = 'index.html'
-    paginate_by = 15
+    paginate_by = 10
 
 
 class SignUpView(CreateView):
