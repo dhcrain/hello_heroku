@@ -1,6 +1,4 @@
-Django
-gunicorn
-hashids==1.1.0
-whitenoise==3.2
 dj-database-url==0.4.1
-psycopg2==2.6.2
+Django==1.10
+hashids==1.1.0
+whitenoise==3.2.1
