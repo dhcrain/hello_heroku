@@ -2,20 +2,24 @@ import datetime
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
-from django.dispatch import receiver
-from django.http import HttpResponseRedirect, Http404, request
-from django.views.generic import View, TemplateView, CreateView, RedirectView, UpdateView, ListView, DeleteView
-from django.views.generic.list import MultipleObjectMixin
+# from django.core.urlresolvers import reverse
+# from django.dispatch import receiver
+from django.http import HttpResponseRedirect, Http404
+from django.views.generic.edit import FormMixin
+from django.views.generic import View, TemplateView, CreateView, UpdateView, ListView, DeleteView
+# from django.views.generic.list import MultipleObjectMixin
 from hashids import Hashids
 from short_app.models import Bookmark, Click
 from django.core.urlresolvers import reverse_lazy
+from short_app.forms import BookmarkCreateForm
 
 
 class IndexView(ListView):
     model = Bookmark
     template_name = 'index.html'
     paginate_by = 10
+
+    # context["bookmark_form"] = BookmarkCreateForm()
 
 
 class SignUpView(CreateView):
@@ -24,12 +28,24 @@ class SignUpView(CreateView):
     success_url = reverse_lazy('login_view')
 
 
-class ProfileView(ListView):
+class ProfileView(CreateView):
     template_name = 'profile.html'
+    # model = Bookmark
+
     model = Bookmark
+    fields = ['title', 'url', 'description']
+    success_url = reverse_lazy('profile_view')
+
+    def form_valid(self, form):
+        hashids = Hashids(salt="yabbadabbadooo")
+        bookmark = form.save(commit=False)
+        bookmark.hash_id = hashids.encode(id(bookmark.url))
+        bookmark.user = self.request.user
+        return super(ShortenLink, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # context["bookmark_form"] = BookmarkCreateForm()
         if self.request.user.is_authenticated():
             context["bookmark"] = Bookmark.objects.filter(user_id=self.request.user)
         else:
