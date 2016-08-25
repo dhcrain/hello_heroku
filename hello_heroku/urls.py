@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-# from app.views import CountDown
 from short_app import views
 from django.contrib.auth.views import login, logout
 
@@ -29,11 +28,10 @@ urlpatterns = [
     url(r'^users/$', views.UserView.as_view(), name='user_view'),
     url(r'^accounts/profile/(?P<pk>\d+)$', views.UserProfileView.as_view(), name='user_profile_view'),
     url(r'^accounts/profile/$', views.ProfileView.as_view(), name='profile_view'),
-    url(r'^accounts/profile/hist/(?P<pk>\d+)$', views.ClickView.as_view(), name='click_view'),
+    # url(r'^accounts/profile/hist/(?P<pk>\d+)$', views.ClickView.as_view(), name='click_view'),
     url(r'^accounts/profile/edit_link/(?P<pk>\d+)/$', views.EditBookmark.as_view(), name='edit_bookmark_view'),
     url(r'^accounts/profile/edit_link/(?P<pk>\d+)/delete/$', views.LinkDelete.as_view(), name='delete_bookmark_view'),
     url(r'^shorten_link/$', views.ShortenLink.as_view(), name='shorten_link'),
     url(r'^d/(?P<hash_id>\w+)', views.ForwardView.as_view(), name='forward_view'),
-    # url(r'^countdown/$', CountDown.as_view(template_name="countdown.html"), name='countdown'),
 
 ]

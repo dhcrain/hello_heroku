@@ -14,7 +14,7 @@
                 <h4 class="modal-title" id="myModalLabel">Shorten a Link</h4>
             </div>
             <div class="modal-body">
-                <form action="" method="post" class="">
+                <form action="{% url 'shorten_link' %}" method="post" class="">
                     <div class="form-group">
                         {% csrf_token %}
                         {{ form|crispy }}

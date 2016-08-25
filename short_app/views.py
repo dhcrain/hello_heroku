@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 # from django.core.urlresolvers import reverse
 # from django.dispatch import receiver
 from django.http import HttpResponseRedirect, Http404
-from django.views.generic.edit import FormMixin
+# from django.views.generic.edit import FormMixin
 from django.views.generic import View, TemplateView, CreateView, UpdateView, ListView, DeleteView
 # from django.views.generic.list import MultipleObjectMixin
 from hashids import Hashids
@@ -19,7 +19,14 @@ class IndexView(ListView):
     template_name = 'index.html'
     paginate_by = 10
 
-    # context["bookmark_form"] = BookmarkCreateForm()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["clicks"] = Bookmark.objects.all()
+        if self.request.user.is_authenticated():
+            context["form"] = BookmarkCreateForm()
+        else:
+            pass
+        return context
 
 
 class SignUpView(CreateView):
@@ -30,7 +37,6 @@ class SignUpView(CreateView):
 
 class ProfileView(CreateView):
     template_name = 'profile.html'
-    # model = Bookmark
 
     model = Bookmark
     fields = ['title', 'url', 'description']
@@ -45,11 +51,23 @@ class ProfileView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context["bookmark_form"] = BookmarkCreateForm()
         if self.request.user.is_authenticated():
             context["bookmark"] = Bookmark.objects.filter(user_id=self.request.user)
+            context["form"] = BookmarkCreateForm()
         else:
             context["bookmark"] = Bookmark.objects.all()
+        return context
+
+
+class UserProfileView(ListView):
+    model = Bookmark
+    template_name = 'profile.html'
+
+    def get_context_data(self, **kwargs):
+        user_id = self.kwargs.get('pk')
+        context = super().get_context_data(**kwargs)
+        context["bookmark"] = Bookmark.objects.filter(user_id=user_id)
+        context["form"] = BookmarkCreateForm()
         return context
 
 
@@ -97,16 +115,16 @@ class LinkDelete(LoginRequiredMixin, DeleteView):
         return link
 
 
-class ClickView(TemplateView):
-    model = Click
-    template_name = "short_app/click_list.html"
-
-    def get_context_data(self, **kwargs):
-        bookmark_pk = self.kwargs.get('pk')
-        context = super().get_context_data(**kwargs)
-        context["bookmark"] = Bookmark.objects.get(id=bookmark_pk)
-        context["clicks"] = Click.objects.filter(link=bookmark_pk)
-        return context
+# class ClickView(TemplateView):
+#     model = Click
+#     template_name = "short_app/click_list.html"
+#
+#     def get_context_data(self, **kwargs):
+#         bookmark_pk = self.kwargs.get('pk')
+#         context = super().get_context_data(**kwargs)
+#         context["bookmark"] = Bookmark.objects.get(id=bookmark_pk)
+#         context["clicks"] = Click.objects.filter(link=bookmark_pk)
+#         return context
 
 
 class BookmarkView(ListView):
@@ -115,14 +133,3 @@ class BookmarkView(ListView):
 
 class UserView(ListView):
     model = User
-
-
-class UserProfileView(ListView):
-    model = Bookmark
-    template_name = 'profile.html'
-
-    def get_context_data(self, **kwargs):
-        user_id = self.kwargs.get('pk')
-        context = super().get_context_data(**kwargs)
-        context["bookmark"] = Bookmark.objects.filter(user_id=user_id)
-        return context

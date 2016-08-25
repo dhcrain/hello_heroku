@@ -1,0 +1,51 @@
+
+
+<table class="table table-condensed">
+    <tr>
+        <th></th>
+        <th>Title</th>
+        <th>Original Link</th>
+        <th class="short-copy">Short Link</th>
+        <th>Clicks</th>
+    </tr>
+{% for mark in bookmark %}
+    <tr>
+        <td>
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample{{ mark.id }}" aria-expanded="false" aria-controls="collapseExample">
+                Details
+            </button>
+        </td>
+        <td>{{ mark.title }}</td>
+        <td><a href="{% url 'forward_view' mark.hash_id %}" target="_blank" >{{ mark.url }}</a></td>
+        <td>
+            <input class="copy-text" type="text" id="website{{ mark.id }}" value="http://{{ request.get_host }}{% url 'forward_view' mark.hash_id %}" />
+            <button class="copy-btn" data-copytarget="#website{{ mark.id }}">copy</button>
+        </td>
+        <td><a class="badge" data-toggle="collapse" data-target="#collapseExample{{ mark.id }}" aria-expanded="false" aria-controls="collapseExample">{{ mark.count }}</a></td>
+    </tr>
+    <tr class="collapse well" id="collapseExample{{ mark.id }}">
+        <td colspan="3">
+            <p><strong>Description:</strong> {{ mark.description }}</p>
+            <div class="">
+                <table class="table table-condensed">
+                    <tr>
+                        <th>Time Clicked</th>
+                    </tr>
+                    {% for click in mark.click_set.all %}
+                        <tr>
+                            <td>{{ click.time_click }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                {% if mark.user == request.user %}
+                    <td class="text-center"><a class="btn btn-default" href="{% url 'edit_bookmark_view' mark.id %}">Edit Link</a></td>
+                    <td><a class="btn btn-danger" href="{% url 'delete_bookmark_view' mark.id %}">Delete</a></td>
+                {% else %}
+                    <td class="pull-right">Created by:</td>
+                    <td><a href="{% url 'user_profile_view' mark.user.id %}">{{ mark.user }}</a></td>
+                {% endif %}
+            </div>
+        </td>
+    </tr>
+{% endfor %}
+</table>

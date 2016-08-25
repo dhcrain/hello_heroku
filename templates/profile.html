@@ -12,39 +12,19 @@
             <h1>Saved Bookmarks</h1>
         </div>
         <div class="col-md-6">
-            {# Loads button and modal for bookmark form #}
-            {% include "includes/bookmark_modal.html" %}
-        </div>
+            <div class="pull-right">
+                {% if request.user.is_authenticated %}
+                    {% include "includes/bookmark_modal.html" %}
+                {% else %}
+                    <a href="{% url 'login_view' %}">Log in to shorten a link</a>
+                {% endif %}
+                <br>
+                <a href="{% url 'user_view' %}">See What Other Users are Bookmarking</a>
+            </div>
     </div>
 
-    <table class="table table-condensed">
-        <tr>
-            <th>Title</th>
-            <th>Original Link</th>
-            <th class="short-copy">Short Link</th>
-            <th>Click Hist</th>
-            <th></th>
-            <td></td>
-        </tr>
-    {% for mark in bookmark %}
-        <tr>
-            <td>{{ mark.title }}</td>
-            <td><a href="{% url 'forward_view' mark.hash_id %}" target="_blank" >{{ mark.url }}</a></td>
-            <td>
-                <input class="copy-text" type="text" id="website{{ mark.id }}" value="http://{{ request.get_host }}{% url 'forward_view' mark.hash_id %}" />
-                <button class="copy-btn" data-copytarget="#website{{ mark.id }}">copy</button>
-            </td>
-            <td><a href="{% url 'click_view' mark.id %}">{{ mark.count }}</a></td>
-            {% if mark.user == request.user %}
-                <td><a class="btn" href="{% url 'edit_bookmark_view' mark.id %}">Edit</a></td>
-                <td><a class="btn btn-danger" href="{% url 'delete_bookmark_view' mark.id %}">Delete</a></td>
-            {% else %}
-                <td>{{ mark.user }}</td>
-                <td></td>
-            {% endif %}
-        </tr>
-    {% endfor %}
-    </table>
+    {% include "includes/bookmark_table.html" %}
+
 
 
 
