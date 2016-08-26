@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     # 'app',
     'short_app',
     'crispy_forms',
+    'url_api',
+    'rest_framework',
 ]
 
 MIDDLEWARE_CLASSES = [
