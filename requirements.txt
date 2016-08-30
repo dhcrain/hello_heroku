@@ -4,3 +4,4 @@ hashids==1.1.0
 whitenoise==3.2.1
 django-crispy-forms==1.6.0
 djangorestframework==3.4.6
+psycopg2==2.6.2
