@@ -26,8 +26,8 @@ class ClickAPIView(generics.ListAPIView):
         return (start_date, end_date)
 
     a_day = timedelta(days=1)
-    first_day, last_day = get_month_range()
-    while first_day > last_day:
+    first_day, end_date = get_month_range()
+    while first_day > end_date:
         # print(first_day)  # list of days for 30 days previous to today
         first_day -= a_day
 
