@@ -1,23 +1,24 @@
 # from django.shortcuts import render
 from rest_framework import generics
-from short_app.models import Click
-from url_api.serializers import ClickSerializer
+from short_app.models import Click, Bookmark
+from url_api.serializers import ClickSerializer, BookmarkSerilizer
 from datetime import datetime, date, timedelta
 # import calendar
 
 
 class ClickAPIView(generics.ListAPIView):
-    # queryset = Click.objects.all()
+    # model = Click
     serializer_class = ClickSerializer
 
     def get_queryset(self):
         one_month = datetime.now() + timedelta(days=-30)
         click = Click.objects.filter(time_click__gt=one_month)
-        print(one_month)
+        # print(one_month)
         for url in click:
-            # print(url.link.pk)  # pk of all clicks
+            print(url.link.pk)  # pk of all clicks
             date = url.time_click.strftime("%Y-%m-%d")  # str of yr-m-d
             print(date)
+            # Goal: for each url.link.pk gather the num of clicks for each date
 
     def get_month_range():
         start_date = date.today()
@@ -32,8 +33,12 @@ class ClickAPIView(generics.ListAPIView):
         first_day -= a_day
 
 
+class LinkAPIView(generics.ListAPIView):
+    model = Bookmark
+    serializer_class = BookmarkSerilizer
 
-
+    def get_queryset(self):
+        return Bookmark.objects.all()
 
 # from django.http import HttpResponse
 # import json
