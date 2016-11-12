@@ -34,11 +34,14 @@ class ClickAPIView(generics.ListAPIView):
 
 
 class LinkAPIView(generics.ListAPIView):
-    model = Bookmark
+    queryset = Bookmark.objects.all()
     serializer_class = BookmarkSerilizer
 
-    def get_queryset(self):
-        return Bookmark.objects.all()
+
+class LinkRetrieveAPIView(generics.RetrieveAPIView):
+    queryset = Bookmark.objects.all()
+    serializer_class = BookmarkSerilizer
+
 
 # from django.http import HttpResponse
 # import json

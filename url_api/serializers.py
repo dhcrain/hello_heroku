@@ -14,4 +14,11 @@ class BookmarkSerilizer(serializers.ModelSerializer):
 
     class Meta:
         model = Bookmark
-        fields = ['title', 'description', 'short_link', 'url', 'created', 'count', 'user']
+        fields = ['id',
+                  'title',
+                  'description',
+                  'short_link',
+                  'url',
+                  'created',
+                  'count',
+                  'user']
