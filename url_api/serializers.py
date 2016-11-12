@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from short_app.models import Click, Bookmark
+from datetime import date, timedelta
 
 
 class ClickSerializer(serializers.ModelSerializer):
@@ -11,6 +12,24 @@ class ClickSerializer(serializers.ModelSerializer):
 
 class BookmarkSerilizer(serializers.ModelSerializer):
     short_link = serializers.HyperlinkedIdentityField(view_name='forward_view', lookup_field='hash_id')
+    month_stats = serializers.SerializerMethodField()
+
+    def get_month_stats(self, obj):
+        start_date = date.today()
+        end_date = start_date + timedelta(days=-30)
+        a_day = timedelta(days=1)
+        month_dict = {}
+
+        while start_date > end_date:
+            month_dict[start_date.strftime("%Y-%m-%d")] = 0
+            start_date -= a_day
+
+        for item in obj.click_set.all():
+            click_time = item.time_click.strftime("%Y-%m-%d")
+            if click_time in month_dict.keys():
+                month_dict[click_time] += 1
+
+        return month_dict
 
     class Meta:
         model = Bookmark
@@ -21,4 +40,5 @@ class BookmarkSerilizer(serializers.ModelSerializer):
                   'url',
                   'created',
                   'count',
-                  'user']
+                  'user',
+                  'month_stats']
