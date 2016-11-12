@@ -21,12 +21,9 @@ class IndexView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context["clicks"] = Bookmark.objects.all()
         context["bookmark"] = Bookmark.objects.all()
         if self.request.user.is_authenticated():
             context["form"] = BookmarkCreateForm()
-        else:
-            pass
         return context
 
 
@@ -38,17 +35,16 @@ class SignUpView(CreateView):
 
 class ProfileView(CreateView):
     template_name = 'profile.html'
-
     model = Bookmark
     fields = ['title', 'url', 'description']
     success_url = reverse_lazy('profile_view')
 
     def form_valid(self, form):
-        hashids = Hashids(salt="yabbadabbadooo")
         bookmark = form.save(commit=False)
+        hashids = Hashids(salt="yabbadabbadooo")
         bookmark.hash_id = hashids.encode(id(bookmark.url))
         bookmark.user = self.request.user
-        return super(ShortenLink, self).form_valid(form)
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -90,8 +86,8 @@ class ForwardView(View):
     def get(self, request, *args, **kwargs):
         hash_id = self.kwargs.get('hash_id', None)      # gets hash_id
         link = Bookmark.objects.get(hash_id=hash_id)    # looks up the link from the hash_id
-        link.count += 1         # increment the count on the Bookmark table
-        link.save()
+        # link.count += 1         # increment the count on the Bookmark table
+        # link.save()
         Click.objects.create(link=link, time_click=datetime.datetime.now())
         return HttpResponseRedirect(link.url)
 
