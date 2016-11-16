@@ -2,6 +2,11 @@
 
 {% block title %}dhcra.in{% endblock %}
 
+{% block head %}
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
+
 {% block content %}
     <div class="row">
         <div class="col-md-6">
@@ -21,10 +26,12 @@
     </div>
 
     <h2>All Shortened Links</h2>
+    {% with object_list as bookmark %}
+        {% include "includes/bookmark_table.html" %}
+    {% endwith %}
 
-    {% include "includes/bookmark_table.html" %}
-
-{#    https://docs.djangoproject.com/en/1.9/topics/class-based-views/mixins/#using-singleobjectmixin-with-listview#}
+{#    https://docs.djangoproject.com/en/1.9/topics/class-based-views/mixins/#using-singleobjectmixin-with-listview #}
+    {% if is_paginated %}
     <nav>
         <ul class="pager">
             {% if page_obj.has_previous %}
@@ -36,4 +43,32 @@
             {% endif %}
         </ul>
     </nav>
+   {% endif %}
+    {% endblock %}
+
+    {% block javascript %}
+        <script type="text/javascript">
+        var page = $(location).attr('search');
+        $.getJSON('/api/short_links/' + page, function(results) {
+            results['results'].forEach(function(link) {
+                var yMax = Math.max.apply(Math, link['month_stats'][1]) + 1;
+                var data = [
+                    {
+                        // dates
+                        x: link['month_stats'][0],
+                        // number of clicks
+                        y: link['month_stats'][1],
+                        type: 'bar'
+                    }
+                ];
+                var layout = {
+                    title: 'Clicks for the past 30 days',
+                    yaxis: {range: [0, yMax]},
+                };
+                var myDiv = 'myDiv' + link['id'];
+                Plotly.newPlot(myDiv, data, layout, {staticPlot: true});
+            });
+
+        });
+        </script>
     {% endblock %}

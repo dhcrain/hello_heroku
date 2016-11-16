@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from short_app.models import Click, Bookmark
 from datetime import date, timedelta
+import operator
 
 
 class ClickSerializer(serializers.ModelSerializer):
@@ -13,6 +14,10 @@ class ClickSerializer(serializers.ModelSerializer):
 class BookmarkSerilizer(serializers.ModelSerializer):
     short_link = serializers.HyperlinkedIdentityField(view_name='forward_view', lookup_field='hash_id')
     month_stats = serializers.SerializerMethodField()
+    # print(month_stats)
+    # dates, clicks = month_stats
+    # x_dates = serializers.SerializerMethodField(dates)
+    # y_click_count = serializers.SerializerMethodField(clicks)
 
     def get_month_stats(self, obj):
         start_date = date.today()
@@ -29,7 +34,22 @@ class BookmarkSerilizer(serializers.ModelSerializer):
             if click_time in month_dict.keys():
                 month_dict[click_time] += 1
 
-        return month_dict
+        sorted_date_click = sorted(month_dict.items(), key=operator.itemgetter(0))
+        dates = []
+        counts = []
+        for calendar, count in sorted_date_click:
+            dates.append(calendar)
+            counts.append(count)
+
+        return dates, counts
+
+    def get_x_dates(self, obj, unpack_dates_clicks):
+        dates = unpack_dates_clicks
+        return dates
+
+    def get_y_click_count(self, obj, unpack_dates_clicks):
+        clicks = unpack_dates_clicks
+        return clicks
 
     class Meta:
         model = Bookmark
@@ -41,4 +61,8 @@ class BookmarkSerilizer(serializers.ModelSerializer):
                   'created',
                   'count',
                   'user',
-                  'month_stats']
+                  'month_stats',
+                  ]
+                #   'x_dates',
+                #   'y_click_count',
+                #   'unpack_dates_clicks']

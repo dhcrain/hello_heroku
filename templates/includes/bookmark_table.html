@@ -25,26 +25,19 @@
     </tr>
     <tr class="collapse well" id="collapseExample{{ mark.id }}">
         <td colspan="3">
+
             <p><strong>Description:</strong> {{ mark.description }}</p>
-            <div class="">
-                <table class="table table-condensed">
-                    <tr>
-                        <th>Time Clicked</th>
-                    </tr>
-                    {% for click in mark.click_set.all %}
-                        <tr>
-                            <td>{{ click.time_click }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-                {% if mark.user == request.user %}
-                    <td class="text-center"><a class="btn btn-default" href="{% url 'edit_bookmark_view' mark.id %}">Edit Link</a></td>
-                    <td><a class="btn btn-danger" href="{% url 'delete_bookmark_view' mark.id %}">Delete</a></td>
-                {% else %}
-                    <td class="pull-right">Created by:</td>
-                    <td><a href="{% url 'user_profile_view' mark.user.id %}">{{ mark.user }}</a></td>
-                {% endif %}
+            <div id="myDiv{{ mark.id }}" style="width: 800px; height: 450px;">
+                <!-- Plotly chart will be drawn inside this DIV -->
             </div>
+            {% if mark.user == request.user %}
+                <td class="text-center"><a class="btn btn-default" href="{% url 'edit_bookmark_view' mark.id %}">Edit Link</a></td>
+                <td><a class="btn btn-danger" href="{% url 'delete_bookmark_view' mark.id %}">Delete</a></td>
+            {% else %}
+                <td class="pull-right">Created by:</td>
+                <td><a href="{% url 'user_profile_view' mark.user.id %}">{{ mark.user }}</a></td>
+            {% endif %}
+            
         </td>
     </tr>
 {% endfor %}

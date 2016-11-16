@@ -21,7 +21,7 @@ class IndexView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["bookmark"] = Bookmark.objects.all()
+        # context["bookmark"] = Bookmark.objects.all()
         if self.request.user.is_authenticated():
             context["form"] = BookmarkCreateForm()
         return context
@@ -86,8 +86,6 @@ class ForwardView(View):
     def get(self, request, *args, **kwargs):
         hash_id = self.kwargs.get('hash_id', None)      # gets hash_id
         link = Bookmark.objects.get(hash_id=hash_id)    # looks up the link from the hash_id
-        # link.count += 1         # increment the count on the Bookmark table
-        # link.save()
         Click.objects.create(link=link, time_click=datetime.datetime.now())
         return HttpResponseRedirect(link.url)
 
