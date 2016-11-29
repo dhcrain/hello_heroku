@@ -48,6 +48,7 @@
 
     {% block javascript %}
         <script type="text/javascript">
+        // http://stackoverflow.com/a/14613849/5119789
         var page = $(location).attr('search');
         $.getJSON('/api/short_links/' + page, function(results) {
             results['results'].forEach(function(link) {
@@ -68,7 +69,6 @@
                 var myDiv = 'myDiv' + link['id'];
                 Plotly.newPlot(myDiv, data, layout, {staticPlot: true});
             });
-
         });
         </script>
     {% endblock %}

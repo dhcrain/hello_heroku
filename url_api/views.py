@@ -13,6 +13,7 @@ class ClickRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Click.objects.all()
     serializer_class = ClickSerializer
 
+
 class LinkAPIView(generics.ListAPIView):
     queryset = Bookmark.objects.all()
     serializer_class = BookmarkSerilizer

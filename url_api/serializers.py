@@ -14,10 +14,6 @@ class ClickSerializer(serializers.ModelSerializer):
 class BookmarkSerilizer(serializers.ModelSerializer):
     short_link = serializers.HyperlinkedIdentityField(view_name='forward_view', lookup_field='hash_id')
     month_stats = serializers.SerializerMethodField()
-    # print(month_stats)
-    # dates, clicks = month_stats
-    # x_dates = serializers.SerializerMethodField(dates)
-    # y_click_count = serializers.SerializerMethodField(clicks)
 
     def get_month_stats(self, obj):
         start_date = date.today()
