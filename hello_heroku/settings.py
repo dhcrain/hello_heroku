@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'url_api',
     'rest_framework',
+    'rest_framework.authtoken',
     'rest_framework_docs',
 ]
 
