@@ -5,7 +5,6 @@ import operator
 from django.contrib.auth.models import User
 
 
-
 class ClickSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -16,6 +15,7 @@ class ClickSerializer(serializers.ModelSerializer):
 class BookmarkSerilizer(serializers.ModelSerializer):
     short_link = serializers.HyperlinkedIdentityField(view_name='forward_view', lookup_field='hash_id')
     month_stats = serializers.SerializerMethodField()
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     def get_month_stats(self, obj):
         start_date = date.today()

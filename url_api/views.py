@@ -2,6 +2,7 @@
 from django.contrib.auth import get_user_model
 from url_api.serializers import ClickSerializer, BookmarkSerilizer, UserSerializer
 from rest_framework import permissions, generics
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from short_app.models import Click, Bookmark
 
 
@@ -15,9 +16,10 @@ class ClickRetrieveAPIView(generics.RetrieveAPIView):
     serializer_class = ClickSerializer
 
 
-class LinkAPIView(generics.ListAPIView):
+class LinkListCreateAPIView(generics.ListCreateAPIView):
     queryset = Bookmark.objects.all()
     serializer_class = BookmarkSerilizer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
 class LinkRetrieveAPIView(generics.RetrieveAPIView):
