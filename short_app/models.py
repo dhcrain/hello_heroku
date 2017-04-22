@@ -1,5 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from short_app.utils import make_short_link
 
 
 class Bookmark(models.Model):
@@ -28,3 +31,9 @@ class Click(models.Model):
 
     class Meta:
         ordering = ["-time_click"]
+
+
+@receiver(pre_save, sender=Bookmark)
+def create_user_profile(**kwargs):
+    instance = kwargs.get("instance")
+    instance.hash_id = make_short_link(instance.url)
