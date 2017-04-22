@@ -7,7 +7,7 @@ class Bookmark(models.Model):
     description = models.TextField(blank=True)
     url = models.URLField()
     created = models.DateTimeField(auto_now_add=True)
-    hash_id = models.CharField(max_length=10, null=True)
+    hash_id = models.CharField(max_length=10)
     user = models.ForeignKey(User)
 
     class Meta:
