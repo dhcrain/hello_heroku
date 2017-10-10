@@ -19,8 +19,8 @@ class ClickRetrieveAPIView(generics.RetrieveAPIView):
 
 class LinkListCreateAPIView(generics.ListCreateAPIView):
     queryset = Bookmark.objects.all()
-    serializer_class = BookmarkSerilizer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    serializer_class = BookmarkSerializer
+    # permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
 class LinkRetrieveAPIView(generics.RetrieveAPIView):
