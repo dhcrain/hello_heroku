@@ -35,7 +35,11 @@
                 <td><a class="btn btn-danger" href="{% url 'delete_bookmark_view' mark.id %}">Delete</a></td>
             {% else %}
                 <td class="pull-right">Created by:</td>
-                <td><a href="{% url 'user_profile_view' mark.user.id %}">{{ mark.user }}</a></td>
+                {% if mark.user %}
+                    <td><a href="{% url 'user_profile_view' mark.user.id %}">{{ mark.user }}</a></td>
+                {% else %}
+                    <td>anon</td>
+                {% endif %}
             {% endif %}
 
         </td>

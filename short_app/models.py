@@ -8,7 +8,7 @@ class Bookmark(models.Model):
     url = models.URLField()
     created = models.DateTimeField(auto_now_add=True)
     hash_id = models.CharField(max_length=10, null=True)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, null=True)
 
     class Meta:
         ordering = ["-created"]
