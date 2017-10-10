@@ -1,7 +1,7 @@
 # from django.shortcuts import render
 from rest_framework import generics
 from short_app.models import Click, Bookmark
-from url_api.serializers import ClickSerializer, BookmarkSerilizer
+from url_api.serializers import ClickSerializer, BookmarkSerializer
 
 
 class ClickAPIView(generics.ListAPIView):
@@ -14,11 +14,12 @@ class ClickRetrieveAPIView(generics.RetrieveAPIView):
     serializer_class = ClickSerializer
 
 
-class LinkAPIView(generics.ListAPIView):
+class LinkListCreateAPIView(generics.ListCreateAPIView):
     queryset = Bookmark.objects.all()
-    serializer_class = BookmarkSerilizer
+    serializer_class = BookmarkSerializer
+    # permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
 class LinkRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Bookmark.objects.all()
-    serializer_class = BookmarkSerilizer
+    serializer_class = BookmarkSerializer

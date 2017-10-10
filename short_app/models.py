@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from hashids import Hashids
 
 class Bookmark(models.Model):
     title = models.CharField(max_length=60)
@@ -8,7 +10,7 @@ class Bookmark(models.Model):
     url = models.URLField()
     created = models.DateTimeField(auto_now_add=True)
     hash_id = models.CharField(max_length=10, null=True)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, null=True)
 
     class Meta:
         ordering = ["-created"]
@@ -28,3 +30,11 @@ class Click(models.Model):
 
     class Meta:
         ordering = ["-time_click"]
+
+
+@receiver(post_save, sender='short_app.Bookmark')
+def create_hash_id(**kwargs):
+    instance = kwargs.get("instance")
+    if kwargs.get("created"):
+        instance.hash_id = Hashids(salt="yabbadabbadooo").encode(id(instance.url))
+        instance.save()
