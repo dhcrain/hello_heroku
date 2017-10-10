@@ -1,15 +1,11 @@
 import datetime
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
-# from django.core.urlresolvers import reverse
-# from django.dispatch import receiver
-from django.http import HttpResponseRedirect, Http404
-# from django.views.generic.edit import FormMixin
-from django.views.generic import View, CreateView, UpdateView, ListView, DeleteView
-# from django.views.generic.list import MultipleObjectMixin
-from short_app.models import Bookmark, Click
 from django.core.urlresolvers import reverse_lazy
+from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect, Http404
+from django.views.generic import View, TemplateView, CreateView, UpdateView, ListView, DeleteView
+from short_app.models import Bookmark, Click
 from short_app.forms import BookmarkCreateForm
 
 
@@ -20,7 +16,6 @@ class IndexView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context["bookmark"] = Bookmark.objects.all()
         if self.request.user.is_authenticated():
             context["form"] = BookmarkCreateForm()
         return context

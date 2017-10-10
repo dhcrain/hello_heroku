@@ -4,14 +4,13 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from hashids import Hashids
 
-
 class Bookmark(models.Model):
     title = models.CharField(max_length=60)
     description = models.TextField(blank=True)
     url = models.URLField()
     created = models.DateTimeField(auto_now_add=True)
-    hash_id = models.CharField(max_length=10)
-    user = models.ForeignKey(User)
+    hash_id = models.CharField(max_length=10, null=True)
+    user = models.ForeignKey(User, null=True)
 
     class Meta:
         ordering = ["-created"]
