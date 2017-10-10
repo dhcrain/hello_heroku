@@ -2,12 +2,8 @@ import datetime
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-# from django.core.urlresolvers import reverse
-# from django.dispatch import receiver
 from django.http import HttpResponseRedirect, Http404
-# from django.views.generic.edit import FormMixin
-from django.views.generic import View, CreateView, UpdateView, ListView, DeleteView
-# from django.views.generic.list import MultipleObjectMixin
+from django.views.generic import View, TemplateView, CreateView, UpdateView, ListView, DeleteView
 from short_app.models import Bookmark, Click
 from django.core.urlresolvers import reverse_lazy
 from short_app.forms import BookmarkCreateForm
