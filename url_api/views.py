@@ -1,6 +1,6 @@
 # from django.shortcuts import render
 from django.contrib.auth import get_user_model
-from url_api.serializers import ClickSerializer, BookmarkSerilizer, UserSerializer
+from url_api.serializers import ClickSerializer, BookmarkSerializer, UserSerializer
 from rest_framework import permissions, generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from short_app.models import Click, Bookmark
