@@ -12,7 +12,7 @@ class ClickSerializer(serializers.ModelSerializer):
         fields = ['link', 'time_click']
 
 
-class BookmarkSerilizer(serializers.ModelSerializer):
+class BookmarkSterilizer(serializers.ModelSerializer):
     short_link = serializers.HyperlinkedIdentityField(view_name='forward_view', lookup_field='hash_id')
     month_stats = serializers.SerializerMethodField()
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
