@@ -41,13 +41,6 @@ class BookmarkSerializer(serializers.ModelSerializer):
 
         return dates, counts
 
-    def get_x_dates(self, obj, unpack_dates_clicks):
-        dates = unpack_dates_clicks
-        return dates
-
-    def get_y_click_count(self, obj, unpack_dates_clicks):
-        clicks = unpack_dates_clicks
-        return clicks
 
     class Meta:
         model = Bookmark
