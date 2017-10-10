@@ -2,13 +2,8 @@ import datetime
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-# from django.core.urlresolvers import reverse
-# from django.dispatch import receiver
 from django.http import HttpResponseRedirect, Http404
-# from django.views.generic.edit import FormMixin
 from django.views.generic import View, TemplateView, CreateView, UpdateView, ListView, DeleteView
-# from django.views.generic.list import MultipleObjectMixin
-from hashids import Hashids
 from short_app.models import Bookmark, Click
 from django.core.urlresolvers import reverse_lazy
 from short_app.forms import BookmarkCreateForm
@@ -41,8 +36,6 @@ class ProfileView(CreateView):
 
     def form_valid(self, form):
         bookmark = form.save(commit=False)
-        hashids = Hashids(salt="yabbadabbadooo")
-        bookmark.hash_id = hashids.encode(id(bookmark.url))
         bookmark.user = self.request.user
         return super().form_valid(form)
 
@@ -74,9 +67,7 @@ class ShortenLink(CreateView):
     success_url = reverse_lazy('profile_view')
 
     def form_valid(self, form):
-        hashids = Hashids(salt="yabbadabbadooo")
         bookmark = form.save(commit=False)
-        bookmark.hash_id = hashids.encode(id(bookmark.url))
         bookmark.user = self.request.user
         return super(ShortenLink, self).form_valid(form)
 
