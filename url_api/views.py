@@ -4,6 +4,7 @@ from url_api.serializers import ClickSerializer, BookmarkSerilizer, UserSerializ
 from rest_framework import permissions, generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from short_app.models import Click, Bookmark
+from url_api.serializers import ClickSerializer, BookmarkSerializer
 
 
 class ClickAPIView(generics.ListAPIView):
@@ -24,7 +25,7 @@ class LinkListCreateAPIView(generics.ListCreateAPIView):
 
 class LinkRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Bookmark.objects.all()
-    serializer_class = BookmarkSerilizer
+    serializer_class = BookmarkSerializer
 
 
 class UserCreateAPIView(generics.CreateAPIView):
