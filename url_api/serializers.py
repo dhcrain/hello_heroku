@@ -41,7 +41,6 @@ class BookmarkSerializer(serializers.ModelSerializer):
 
         return dates, counts
 
-
     class Meta:
         model = Bookmark
         fields = ['id',
@@ -54,6 +53,17 @@ class BookmarkSerializer(serializers.ModelSerializer):
                   'user',
                   'month_stats',
                   ]
+
+    def create(self, validated_data):
+        bookmark = Bookmark()
+        bookmark.title = validated_data['title']
+        bookmark.url = validated_data['url']
+        bookmark.user = validated_data['user']
+        desc = validated_data.get('description')
+        if desc:
+            bookmark.description = desc
+        bookmark.save()
+        return bookmark
 
 
 class UserSerializer(serializers.ModelSerializer):
