@@ -8,6 +8,12 @@ from short_app.models import Click, Bookmark
 
 
 def get_month_dict(start_date = date.today(), end_date = date.today() + timedelta(days=-30)):
+    month_dict = {}
+    a_day = timedelta(days=1)
+    while start_date > end_date:
+        month_dict[start_date.strftime("%Y-%m-%d")] = 0
+        start_date -= a_day
+    return month_dict
 
 
 class ClickSerializer(serializers.ModelSerializer):
@@ -30,14 +36,7 @@ class BookmarkSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     def get_month_stats(self, obj):
-        start_date = date.today()
-        end_date = start_date + timedelta(days=-30)
-        a_day = timedelta(days=1)
-        month_dict = {}
-
-        while start_date > end_date:
-            month_dict[start_date.strftime("%Y-%m-%d")] = 0
-            start_date -= a_day
+        month_dict = get_month_dict()
 
         for item in obj.click_set.all():
             click_time = item.time_click.strftime("%Y-%m-%d")
@@ -59,6 +58,7 @@ class BookmarkSerializer(serializers.ModelSerializer):
                   'title',
                   'description',
                   'short_link',
+                  'hash_id',
                   'url',
                   'created',
                   'count',
