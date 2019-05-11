@@ -1,8 +1,11 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from hashids import Hashids
+from rest_framework.authtoken.models import Token
+
 
 class Bookmark(models.Model):
     title = models.CharField(max_length=60)
@@ -32,9 +35,14 @@ class Click(models.Model):
         ordering = ["-time_click"]
 
 
-@receiver(post_save, sender='short_app.Bookmark')
+@receiver(pre_save, sender='short_app.Bookmark')
 def create_hash_id(**kwargs):
     instance = kwargs.get("instance")
-    if kwargs.get("created"):
+    if instance:
         instance.hash_id = Hashids(salt="yabbadabbadooo").encode(id(instance.url))
-        instance.save()
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
