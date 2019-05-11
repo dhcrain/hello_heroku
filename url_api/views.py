@@ -1,11 +1,13 @@
-from django.contrib.auth import get_user_model
 from datetime import datetime
-from url_api.serializers import ClickSerializer, BookmarkLinkSerializer, BookmarkSerializer, UserSerializer
+
+from django.contrib.auth import get_user_model
+from django_filters import filters
 from rest_framework import permissions, generics
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from short_app.models import Click, Bookmark
-from url_api.serializers import ClickSerializer, BookmarkSerializer
 from rest_framework.exceptions import NotFound
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
+from short_app.models import Click, Bookmark
+from url_api.serializers import ClickSerializer, BookmarkLinkSerializer, BookmarkSerializer, UserSerializer
 
 
 class ClickAPIView(generics.ListAPIView):

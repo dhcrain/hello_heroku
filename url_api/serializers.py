@@ -1,8 +1,13 @@
-from rest_framework import serializers
-from short_app.models import Click, Bookmark
-from datetime import date, timedelta
 import operator
+from datetime import date, timedelta
+
 from django.contrib.auth.models import User
+from rest_framework import serializers
+
+from short_app.models import Click, Bookmark
+
+
+def get_month_dict(start_date = date.today(), end_date = date.today() + timedelta(days=-30)):
 
 
 class ClickSerializer(serializers.ModelSerializer):
