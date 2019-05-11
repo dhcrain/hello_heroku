@@ -1,9 +1,11 @@
 from django.contrib.auth import get_user_model
-from url_api.serializers import ClickSerializer, BookmarkSerializer, UserSerializer
+from datetime import datetime
+from url_api.serializers import ClickSerializer, BookmarkLinkSerializer, BookmarkSerializer, UserSerializer
 from rest_framework import permissions, generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from short_app.models import Click, Bookmark
 from url_api.serializers import ClickSerializer, BookmarkSerializer
+from rest_framework.exceptions import NotFound
 
 
 class ClickAPIView(generics.ListAPIView):
@@ -25,6 +27,20 @@ class LinkListCreateAPIView(generics.ListCreateAPIView):
 class LinkRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Bookmark.objects.all()
     serializer_class = BookmarkSerializer
+
+
+class LinkUrlRetrieveAPIView(generics.RetrieveAPIView):
+    serializer_class = BookmarkLinkSerializer
+
+    def get_object(self):
+        hash_id = self.kwargs.get('hash_id', None)
+        if hash_id is not None:
+            try:
+                link = Bookmark.objects.get(hash_id=hash_id)
+                Click.objects.create(link=link, time_click=datetime.now())
+            except:
+                raise NotFound(detail="Error 404, url not found", code=404)
+            return link
 
 
 class UserCreateAPIView(generics.CreateAPIView):
