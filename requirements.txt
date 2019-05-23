@@ -1,5 +1,5 @@
 dj-database-url==0.4.1
-Django==1.11.17
+Django==1.11.20
 django-crispy-forms==1.6.0
 djangorestframework==3.8.2
 drfdocs==0.0.11
