@@ -15,7 +15,11 @@ SECRET_KEY = '6clmz2wxdul&+jy#=&^3e3f5*tj2q6@f#&rxa6#2ym*!yoeqa7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "dhcra.in",
+    "dhcrain.herokuapp.com"
+]
 
 
 # Application definition
@@ -34,6 +38,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_docs',
+    'django_filters',
 ]
 
 MIDDLEWARE_CLASSES = [
