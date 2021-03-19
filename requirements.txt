@@ -1,7 +1,7 @@
 dj-database-url==0.4.1
 Django==1.11.28
 django-crispy-forms==1.6.0
-djangorestframework==3.9.1
+djangorestframework==3.11.2
 djangorestframework-filters==0.11.1
 drfdocs==0.0.11
 gunicorn==19.6.0
